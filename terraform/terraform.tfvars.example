@@ -1,0 +1,8 @@
+aws_region = "us-west-2"
+cluster_name = "nginx-k8s-cluster"
+kubernetes_version = "1.28"
+environment = "production"
+instance_type = "t3.medium"
+node_count = 3
+min_node_count = 2
+max_node_count = 5

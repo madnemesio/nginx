@@ -1,0 +1,53 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: nginx-repo
+  namespace: flux-system
+spec:
+  interval: 1m0s
+  url: https://github.com/madnemesio/nginx
+  ref:
+    branch: main
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: nginx-app
+  namespace: flux-system
+spec:
+  interval: 5m0s
+  path: ./k8s/base
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: nginx-repo
+  targetNamespace: nginx-app
+  wait: true
+  timeout: 5m
+  healthChecks:
+    - apiVersion: apps/v1
+      kind: Deployment
+      name: nginx-deployment
+      namespace: nginx-app
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: nginx-app-production
+  namespace: flux-system
+spec:
+  interval: 5m0s
+  path: ./k8s/overlays/production
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: nginx-repo
+  targetNamespace: nginx-app
+  wait: true
+  timeout: 5m
+  healthChecks:
+    - apiVersion: apps/v1
+      kind: Deployment
+      name: prod-nginx-deployment
+      namespace: nginx-app
