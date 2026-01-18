@@ -5,16 +5,15 @@ LABEL maintainer="nginx-team"
 LABEL version="1.0"
 LABEL description="Nginx web server for Kubernetes deployment"
 
-# Create a non-root user
-RUN addgroup -g 101 -S nginx && \
-    adduser -S -D -H -u 101 -h /var/cache/nginx -s /sbin/nologin -G nginx -g nginx nginx
+# nginx user already exists in base image (UID/GID 101)
+# Just ensure proper permissions for nginx user
 
 # Copy custom nginx configuration (optional)
 # COPY nginx.conf /etc/nginx/nginx.conf
 
 # Create necessary directories and set permissions
 RUN mkdir -p /var/cache/nginx /var/log/nginx /var/run && \
-    chown -R nginx:nginx /var/cache/nginx /var/log/nginx /var/run && \
+    chown -R nginx:nginx /var/cache/nginx /var/log/nginx /var/run /usr/share/nginx/html && \
     chmod -R 755 /var/cache/nginx /var/log/nginx /var/run
 
 # Copy custom HTML content (optional)
