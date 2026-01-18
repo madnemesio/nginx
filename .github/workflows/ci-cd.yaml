@@ -137,7 +137,7 @@ jobs:
 
       - name: Update kubeconfig
         run: |
-          aws eks update-kubeconfig --region us-west-2 --name nginx-staging-cluster
+          aws eks update-kubeconfig --region us-west-2 --name ${{ secrets.STAGING_CLUSTER_NAME || 'nginx-k8s-cluster' }}
 
       - name: Deploy to Kubernetes
         run: |
@@ -165,7 +165,7 @@ jobs:
 
       - name: Update kubeconfig
         run: |
-          aws eks update-kubeconfig --region us-west-2 --name nginx-prod-cluster
+          aws eks update-kubeconfig --region us-west-2 --name ${{ secrets.PROD_CLUSTER_NAME || 'nginx-k8s-cluster' }}
 
       - name: Deploy to Kubernetes
         run: |

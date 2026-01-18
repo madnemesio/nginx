@@ -66,11 +66,17 @@ spec:
           mountPath: /etc/nginx/nginx.conf
           subPath: nginx.conf
           readOnly: true
+        - name: cache
+          mountPath: /var/cache/nginx
+        - name: run
+          mountPath: /var/run
+        - name: tmp
+          mountPath: /tmp
         securityContext:
           runAsNonRoot: true
           runAsUser: 101
           allowPrivilegeEscalation: false
-          readOnlyRootFilesystem: false
+          readOnlyRootFilesystem: true
           capabilities:
             drop:
             - ALL
@@ -80,6 +86,12 @@ spec:
       - name: nginx-config
         configMap:
           name: nginx-config
+      - name: cache
+        emptyDir: {}
+      - name: run
+        emptyDir: {}
+      - name: tmp
+        emptyDir: {}
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
